@@ -1,0 +1,4 @@
+1. Select * from attractions 
+WHERE City = 'St. Louis';
+
+2. 
