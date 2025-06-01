@@ -1,4 +1,38 @@
-1. Select * from attractions 
+Q1. SELECT * from attractions 
 WHERE City = 'St. Louis';
 
-2. 
+Q2. SELECT attractions.name, COUNT(*) 
+FROM attractions 
+JOIN reviews ON attractions.attractionID = reviews.attractionID 
+GROUP BY attractions.name 
+ORDER BY COUNT(*) DESC;
+
+Q3.SELECT attractions.name, AVG(reviews.rating)
+FROM attractions 
+JOIN reviews ON attractions.attractionID = reviews.attractionID 
+GROUP BY attractions.name 
+ORDER BY AVG(reviews.rating) DESC;
+
+Q4. SELECT attractions.name
+FROM attractions 
+JOIN reviews ON attractions.attractionID = reviews.attractionID 
+GROUP BY attractions.name
+HAVING MAX(rating = 5) AND MAX(rating = 3);
+
+Q5. SELECT category, name, avg_rating
+FROM (
+SELECT attractions.category, attractions.name, AVG(reviews.rating) AS avg_rating
+FROM attractions
+JOIN reviews ON attractions.attractionID = reviews.attractionID
+GROUP BY attractions.attractionID
+) AS avg_table
+WHERE (category, avg_rating) IN (
+SELECT category, MAX(avg_rating)
+FROM (
+SELECT attractions.category, AVG(reviews.rating) AS avg_rating
+FROM attractions 
+JOIN reviews ON attractions.attractionID = reviews.attractionID
+GROUP BY attractions.attractionID
+) AS sub_avg
+GROUP BY category
+);
